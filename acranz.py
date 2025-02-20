@@ -126,7 +126,7 @@ input4 = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 # 環境変数から数量を取得
-input_value = os.getenv('INPUT_QUANTITY', '200'
+input_value = os.getenv('INPUT_QUANTITY', '200')
 num_windows = 1
 
 threads = []
