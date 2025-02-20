@@ -136,7 +136,7 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/A4C2J0641635/sinyo/tku_odr/init?meigCd=0082000000&specifyMeig=1&sinyoToriKbn=1"
+url = "https://trade.smbcnikko.co.jp/OdrMng/E51AI0650643/sinyo/tku_odr/init?meigCd=0098420000&specifyMeig=1&sinyoToriKbn=1"
 input1 = "388"
 input2 = "262915"
 input3 = "boukensya7"
