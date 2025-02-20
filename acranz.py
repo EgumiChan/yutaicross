@@ -1,4 +1,3 @@
-import os
 import requests
 import logging
 from selenium import webdriver
@@ -51,47 +50,8 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
 
     driver.get(url)
 
-    try:
-        text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-        logging.info(f"{text_to_log}")
-
-        logging.info(f"{text_to_log}の一般信用売りを実行します")
-        input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-        input_field.send_keys(input_value)
-
-        new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-        new_button.click()
-
-        final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-        final_button.click()
-
-
+    while True:
         try:
-            final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
-            final_input.click()
-
-            try:
-                pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
-                pad_input.send_keys(input4)
-
-                final_click = driver.find_element(By.XPATH, final_xpath)
-                final_click.click()
-
-                try:
-                    final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
-                    final_text = final_element.text
-                    message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
-                    send_discord_notify(message)
-                    logging.info(message)
-                except:
-                    logging.error('争奪戦に負けました')
-            except:
-                logging.error("在庫なし")
-        except Exception as e:
-            logging.error('ページに不正検知されましたのでURLを再度読み込みます')
-            
-            driver.get(url)
-            
             text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
             logging.info(f"{text_to_log}")
 
@@ -105,23 +65,85 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
             final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
             final_button.click()
 
-    except Exception as e:
-        logging.error(f"ページロードエラー: {e}")
-        driver.get(url)
+            while True:
+                try:
+                    final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
+                    final_input.click()
+
+                    try:
+                        pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
+                        pad_input.send_keys(input4)
+
+                        final_click = driver.find_element(By.XPATH, final_xpath)
+                        final_click.click()
+
+                        try:
+                            final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
+                            final_text = final_element.text
+                            message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
+                            send_discord_notify(message)
+                            logging.info(message)
+                            break
+                        except:
+                            logging.error('争奪戦に負けましたので在庫リスポーン取得を試みます。')
+                            
+                            driver.get(url)
+                    
+                            text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
+                            logging.info(f"{text_to_log}")
+                
+                            logging.info(f"{text_to_log}の一般信用売りを実行します")
+                            input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
+                            input_field.send_keys(input_value)
+                
+                            new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
+                            new_button.click()
+                
+                            final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
+                            final_button.click()
+                            
+                            continue
+                        break
+                    except:
+                        logging.error("在庫なし")
+                        continue
+                    break
+                except Exception as e:
+                    logging.error('ページに不正検知されましたのでURLを再度読み込みます')
+                    
+                    driver.get(url)
+                    
+                    text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
+                    logging.info(f"{text_to_log}")
+        
+                    logging.info(f"{text_to_log}の一般信用売りを実行します")
+                    input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
+                    input_field.send_keys(input_value)
+        
+                    new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
+                    new_button.click()
+        
+                    final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
+                    final_button.click()
+                    continue
+            break    
+        except Exception as e:
+            logging.error(f"ページロードエラー: {e}")
+            driver.get(url)
+            continue
 
     time.sleep(5)
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/E51AI0650643/sinyo/tku_odr/init?meigCd=0098420000&specifyMeig=1&sinyoToriKbn=1"
+url = "https://trade.smbcnikko.co.jp/OdrMng/A4C2J0641635/sinyo/tku_odr/init?meigCd=0082000000&specifyMeig=1&sinyoToriKbn=1"
 input1 = "388"
 input2 = "262915"
 input3 = "boukensya7"
 input4 = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr/2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
-# 環境変数から数量を取得
-input_value = os.getenv('INPUT_QUANTITY', '200')
+final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
+input_value = "100"
 num_windows = 1
 
 threads = []
