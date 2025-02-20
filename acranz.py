@@ -87,7 +87,6 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                     logging.error('争奪戦に負けました')
             except:
                 logging.error("在庫なし")
-                continue
         except Exception as e:
             logging.error('ページに不正検知されましたのでURLを再度読み込みます')
             
@@ -105,12 +104,10 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
 
             final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
             final_button.click()
-            continue
 
     except Exception as e:
         logging.error(f"ページロードエラー: {e}")
         driver.get(url)
-        continue
 
     time.sleep(5)
     driver.quit()
@@ -122,7 +119,7 @@ input2 = "262915"
 input3 = "boukensya7"
 input4 = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
+final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr/2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 # 環境変数から数量を取得
 input_value = os.getenv('INPUT_QUANTITY', '200')
 num_windows = 1
