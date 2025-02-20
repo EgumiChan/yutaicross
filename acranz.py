@@ -51,8 +51,49 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
 
     driver.get(url)
 
-    while True:
+    try:
+        text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
+        logging.info(f"{text_to_log}")
+
+        logging.info(f"{text_to_log}の一般信用売りを実行します")
+        input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
+        input_field.send_keys(input_value)
+
+        new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
+        new_button.click()
+
+        final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
+        final_button.click()
+
+
         try:
+            final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
+            final_input.click()
+
+            try:
+                pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
+                pad_input.send_keys(input4)
+
+                final_click = driver.find_element(By.XPATH, final_xpath)
+                final_click.click()
+
+                try:
+                    final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
+                    final_text = final_element.text
+                    message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
+                    send_discord_notify(message)
+                    logging.info(message)
+                except:
+                    logging.error('争奪戦に負けました')
+                break
+            except:
+                logging.error("在庫なし")
+                continue
+        except Exception as e:
+            logging.error('ページに不正検知されましたのでURLを再度読み込みます')
+            
+            driver.get(url)
+            
             text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
             logging.info(f"{text_to_log}")
 
@@ -65,54 +106,12 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
 
             final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
             final_button.click()
-
-            while True:
-                try:
-                    final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
-                    final_input.click()
-
-                    try:
-                        pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
-                        pad_input.send_keys(input4)
-
-                        final_click = driver.find_element(By.XPATH, final_xpath)
-                        final_click.click()
-
-                        try:
-                            final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
-                            final_text = final_element.text
-                            message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
-                            send_discord_notify(message)
-                            logging.info(message)
-                        except:
-                            logging.error('争奪戦に負けました')
-                        break
-                    except:
-                        logging.error("在庫なし")
-                        continue
-                except Exception as e:
-                    logging.error('ページに不正検知されましたのでURLを再度読み込みます')
-                    
-                    driver.get(url)
-                    
-                    text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-                    logging.info(f"{text_to_log}")
-        
-                    logging.info(f"{text_to_log}の一般信用売りを実行します")
-                    input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-                    input_field.send_keys(input_value)
-        
-                    new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-                    new_button.click()
-        
-                    final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-                    final_button.click()
-                    continue
-
-        except Exception as e:
-            logging.error(f"ページロードエラー: {e}")
-            driver.get(url)
             continue
+
+    except Exception as e:
+        logging.error(f"ページロードエラー: {e}")
+        driver.get(url)
+        continue
 
     time.sleep(5)
     driver.quit()
