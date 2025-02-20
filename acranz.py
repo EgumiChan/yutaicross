@@ -85,7 +85,6 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                     logging.info(message)
                 except:
                     logging.error('争奪戦に負けました')
-                break
             except:
                 logging.error("在庫なし")
                 continue
