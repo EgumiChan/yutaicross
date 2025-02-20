@@ -116,15 +116,7 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
     driver.quit()
 
 # メインスクリプト
-urls = [
-    ("リテールパートナーズ(8167)", "https://trade.smbcnikko.co.jp/OdrMng/BCA5I0702880/sinyo/tku_odr/init?meigCd=0081670000&specifyMeig=1&sinyoToriKbn=1"),
-    ("イオンモール(8905)", "https://trade.smbcnikko.co.jp/OdrMng/BCA5I0714173/sinyo/tku_odr/init?meigCd=0089050000&specifyMeig=1&sinyoToriKbn=1"),
-    ("西松屋チェーン(7545)", "https://trade.smbcnikko.co.jp/OdrMng/BCA5I0715606/sinyo/tku_odr/init?meigCd=0075450000&specifyMeig=1&sinyoToriKbn=1"),
-    ("吉野家ホールディングス(9861)", "https://trade.smbcnikko.co.jp/OdrMng/BCA5I0726381/sinyo/tku_odr/init?meigCd=0098610000&specifyMeig=1&sinyoToriKbn=1"),
-    ("リンガーハット(8200)", "https://trade.smbcnikko.co.jp/OdrMng/A4C2J0641635/sinyo/tku_odr/init?meigCd=0082000000&specifyMeig=1&sinyoToriKbn=1"),
-    ("アークランズ(9842)", "https://trade.smbcnikko.co.jp/OdrMng/E51AI0650643/sinyo/tku_odr/init?meigCd=0098420000&specifyMeig=1&sinyoToriKbn=1")
-]
-
+url = "https://trade.smbcnikko.co.jp/OdrMng/E51AI0650643/sinyo/tku_odr/init?meigCd=0098420000&specifyMeig=1&sinyoToriKbn=1"
 input1 = "388"
 input2 = "262915"
 input3 = "boukensya7"
@@ -132,35 +124,19 @@ input4 = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 
-# 100〜2000の値のリストを作成
-possible_values = [str(i) for i in range(100, 2100, 100)]
+# 数量を200固定
+input_value = "200"
 
-# ユーザーにどのURLを割り当てるか選択させ、その後にinput_valueを選択させる
-url_selections = []
-input_values = []
+# ウィンドウ数を1固定
+num_windows = 1
 
-# ウィンドウ数を指定
-num_windows = int(input("Enter the number of windows you want to use: "))
-
-for i in range(1, num_windows + 1):
-    print(f"Select URL for thread {i}:")
-    for j, (name, url) in enumerate(urls):
-        print(f"{j + 1}. {name}")
-    url_selection = int(input(f"Enter the number (1-{len(urls)}) for thread {i}: ")) - 1
-    url_selections.append(urls.pop(url_selection)[1])
-
-    print(f"Select input_value for thread {i}:")
-    for j, value in enumerate(possible_values):
-        print(f"{j + 1}. {value}")
-    input_selection = int(input(f"Enter the number (1-{len(possible_values)}) for thread {i}: ")) - 1
-    input_values.append(possible_values[input_selection])
-
-# ウィンドウを新しく開いて並列に実行
+# ウィンドウを新しく開いて実行
 threads = []
 for i in range(num_windows):
-    thread = threading.Thread(target=perform_operations, args=(url_selections[i], input1, input2, input3, input4, input_values[i], user_agent, final_xpath))
+    thread = threading.Thread(target=perform_operations, args=(url, input1, input2, input3, input4, input_value, user_agent, final_xpath))
     threads.append(thread)
     thread.start()
 
 for thread in threads:
     thread.join()
+
