@@ -93,13 +93,14 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                         except:
                             logging.error("指定された要素が見つかりません。再試行します。")
                             continue
+                    except Exception as e:
+                        logging.error(f"最終要素の操作エラー: {e}")
 
             else:
                 driver.get(url)
 
-        except:
-            logging.error("ページロードエラー、再試行します。")
-            continue
+        except Exception as e:
+            logging.error(f"ページロードエラー: {e}")
 
     time.sleep(5)
     driver.quit()
