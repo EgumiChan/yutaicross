@@ -22,4 +22,5 @@ jobs:
         pip install requests selenium webdriver_manager
 
     - name: Run Python script
-      run: python autocross.py
+      run: |
+        python autocross.py 2>&1 | tee python_script.log
