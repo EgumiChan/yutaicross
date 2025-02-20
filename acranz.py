@@ -8,6 +8,9 @@ from selenium.webdriver.common.by import By
 import time
 import threading
 
+# ログの設定
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 # DiscordのウェブフックURLを設定
 DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1341405121938194442/Jyx6A3Pmx9r3Tys7m1ouJ8n-_GaiLtZ7lsQXQ_vPbHuKpo1KisnHbzT6NWszrp5BNvk2'
 
@@ -22,18 +25,17 @@ def send_discord_notify(message):
         logging.error('通知の送信に失敗しました')
 
 def perform_operations(url, input1, input2, input3, input4, input_value, user_agent, final_xpath):
-
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument(f"user-agent={user_agent}")
-    
+
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.get("https://trade.smbcnikko.co.jp/Etc/1/webtoppage/")
 
-    # 入力フィールドに値を入力
+    logging.info("指定された入力フィールドに値を入力")
     pad_input_0 = driver.find_element(By.ID, "padInput0")
     pad_input_0.send_keys(input1)
 
@@ -43,28 +45,21 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
     pad_input_2 = driver.find_element(By.ID, "padInput2")
     pad_input_2.send_keys(input3)
 
-    # 指定されたXPathのボタンをクリック
     button = driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[1]/div/div[2]/div[1]/div[1]/div/form/div[4]/div/button')
     button.click()
 
     while True:
         try:
             driver.get(url)
-            # 指定されたXPathのテキストを取得
             text_element = driver.find_element(By.XPATH, '//*[@id="iurikanosu"]/span')
             text_value = text_element.text
-
-            # テキストを数値に変換
             numeric_value = int(text_value.replace('株', '').replace(' ', '').replace(',', ''))
-            # 上記のXPathのテキストを取得
             text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-            # テキストをログに表示
-            print(f"{text_to_log}")
-            print(f"{text_value}")
+            logging.info(f"{text_to_log}")
+            logging.info(f"{text_value}")
 
             if numeric_value >= 100:
-                # 数値が100以上であれば操作を続行
-                print(f"{text_to_log}の一般信用売りを実行します")
+                logging.info(f"{text_to_log}の一般信用売りを実行します")
                 input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
                 input_field.send_keys(input_value)
 
@@ -78,38 +73,32 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                     try:
                         final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
                         final_input.click()
-                        
-                        # 新たに指定されたXPathの要素が存在するか確認
-                        pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
-                        pad_input.send_keys(input4)
-                        
-                        # 最終的なXPathのボタンをクリック
-                        final_click = driver.find_element(By.XPATH, final_xpath)
-                        final_click.click()
 
-                        # 要素の存在を確認
                         try:
-                            final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
-                            final_text = final_element.text
-                            message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
-                            send_discord_notify(message)
-                            print(message)
+                            pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
+                            pad_input.send_keys(input4)
+
+                            final_click = driver.find_element(By.XPATH, final_xpath)
+                            final_click.click()
+
+                            try:
+                                final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
+                                final_text = final_element.text
+                                message = f'一般信用売りが完了しました。\n　{text_to_log} {input_value}株\n　{final_text}'
+                                send_discord_notify(message)
+                                logging.info(message)
+                            except:
+                                logging.error('指定された要素が見つかりません。')
+                            break
                         except:
-                            print('指定された要素が見つかりません。')
-                        break  # 要素が存在すればループを抜ける
-                    except:
-                        # 要素が存在しない場合は再試行
-                        print("指定された要素が見つかりません。再試行します。")
-                        continue
+                            logging.error("指定された要素が見つかりません。再試行します。")
+                            continue
 
             else:
-                # 数値が100未満であれば再度URLを読み込み
-                #time.sleep(1)  # 1秒待機して再試行
                 driver.get(url)
-                
 
         except:
-            print("ページロードエラー、再試行します。")
+            logging.error("ページロードエラー、再試行します。")
             continue
 
     time.sleep(5)
@@ -123,14 +112,9 @@ input3 = "boukensya7"
 input4 = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
-
-# 数量を200固定
 input_value = "200"
-
-# ウィンドウ数を1固定
 num_windows = 1
 
-# ウィンドウを新しく開いて実行
 threads = []
 for i in range(num_windows):
     thread = threading.Thread(target=perform_operations, args=(url, input1, input2, input3, input4, input_value, user_agent, final_xpath))
@@ -139,4 +123,3 @@ for i in range(num_windows):
 
 for thread in threads:
     thread.join()
-
