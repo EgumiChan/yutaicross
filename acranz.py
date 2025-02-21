@@ -7,7 +7,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import datetime
 import time
 import threading
 
@@ -72,16 +71,9 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                 try:
                     final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
                     
-                    # 日本標準時の17時30分04.5秒まで待機
-                    target_time = datetime.datetime.now().replace(hour=16, minute=41, second=4, microsecond=500000)
-                    wait_until_target_time(target_time)
-                    
                     final_input.click()
 
                     try:
-                        WebDriverWait(driver, 120).until(
-                            EC.presence_of_element_located((By.XPATH, '//*[@id="padInput"]'))
-                        )
                         pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
                         pad_input.send_keys(input4)
 
