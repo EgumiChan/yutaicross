@@ -73,7 +73,7 @@ def perform_operations(url, input1, input2, input3, input4, input_value, user_ag
                     final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
                     
                     # 日本標準時の17時30分04.5秒まで待機
-                    target_time = datetime.datetime.now().replace(hour=17, minute=30, second=4, microsecond=500000)
+                    target_time = datetime.datetime.now().replace(hour=16, minute=41, second=4, microsecond=500000)
                     wait_until_target_time(target_time)
                     
                     final_input.click()
