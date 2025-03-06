@@ -88,7 +88,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
             while True:
                 try:
                     # 信用売りのボタンをクリック（連打対象）
-                    time.sleep(0.1)
+                    #time.sleep(0.1)
                     final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
                     final_input.click()
 
