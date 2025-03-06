@@ -52,7 +52,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     pad_input_2 = driver.find_element(By.ID, "padInput2")
     pad_input_2.send_keys(loginPass)
 
-    button = driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[1]/div/div[2]/div[1]/div[1]/div/form/div[4]/div/button')
+    button = driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[1]/div/div/div[1]/div[1]/div/form/div[4]/div/button')
     button.click()
 
     # 指定した銘柄の一般信用売りのページにアクセス
