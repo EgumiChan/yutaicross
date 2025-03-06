@@ -227,7 +227,7 @@ inStock = 500
 
 threads = []
 for i in range(num_windows):
-    thread = threading.Thread(target=perform_operations, args=(url, input1, input2, input3, input4, input_value, user_agent, final_xpath))
+    thread = threading.Thread(target=perform_operations, args=(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass, neStock, inStock, user_agent, final_xpath, joken))
     threads.append(thread)
     thread.start()
 
