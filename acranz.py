@@ -220,8 +220,8 @@ final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/
 input_value = "100"
 num_windows = 1
 joken = "寄付"
-neStock = 100
-inStock = 100
+neStock = 500
+inStock = 500
 
 
 
