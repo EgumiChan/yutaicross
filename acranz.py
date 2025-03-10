@@ -210,7 +210,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/ADDDA0579653/sinyo/tku_odr/init?meigCd=0076160000&specifyMeig=1&sinyoToriKbn=1"
+url = "https://trade.smbcnikko.co.jp/OdrMng/9AEEA0727436/sinyo/tku_odr/init?meigCd=0096630000&specifyMeig=1&sinyoToriKbn=1"
 loginShitenNo = "388"
 loginKouzaNo = "262915"
 loginPass = "boukensya7"
@@ -220,8 +220,8 @@ final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/
 input_value = "100"
 num_windows = 1
 joken = "寄付"
-neStock = 500
-inStock = 500
+neStock = 100
+inStock = 100
 
 
 
