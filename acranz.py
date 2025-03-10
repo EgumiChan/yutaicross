@@ -210,7 +210,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/5E5C70745491/sinyo/tku_odr/init?meigCd=0074210000&specifyMeig=1&sinyoToriKbn=1"
+url = "https://trade.smbcnikko.co.jp/OdrMng/ADDDA0579653/sinyo/tku_odr/init?meigCd=0076160000&specifyMeig=1&sinyoToriKbn=1"
 loginShitenNo = "388"
 loginKouzaNo = "262915"
 loginPass = "boukensya7"
