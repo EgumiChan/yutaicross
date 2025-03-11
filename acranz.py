@@ -210,7 +210,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/9AEEA0727436/sinyo/tku_odr/init?meigCd=0096630000&specifyMeig=1&sinyoToriKbn=1"
+url = "https://trade.smbcnikko.co.jp/OdrMng/6BC1B0359122/sinyo/tku_odr/init?meigCd=0027490000&specifyMeig=1&sinyoToriKbn=1"
 loginShitenNo = "388"
 loginKouzaNo = "262915"
 loginPass = "boukensya7"
@@ -219,9 +219,9 @@ user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 input_value = "100"
 num_windows = 1
-joken = "寄付"
-neStock = 100
-inStock = 100
+joken = "引け"
+neStock = 500
+inStock = 500
 
 
 
