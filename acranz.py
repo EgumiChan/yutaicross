@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import threading
+import os
 
 # ログの設定
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -217,11 +218,10 @@ loginPass = "boukensya7"
 torihikiPass = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
-input_value = "500"
 num_windows = 1
-joken = "引け"
-neStock = 500
-inStock = 500
+joken = os.getenv('INPUT_QUANTITY') #注文方法
+neStock = os.getenv('INPUT_QUANTITY') #残り必要株数
+inStock = os.getenv('INPUT_QUANTITY') #1回注文株数
 
 
 
