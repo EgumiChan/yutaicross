@@ -3,18 +3,19 @@ name: アークランズ
 on: 
   workflow_dispatch:
     inputs:
+      url:
+        description: '株番号の入力'
+        required: true
+        default: '1234'
+        
       nestock:
         description: '必要残り株数'
         required: true
-        default: 100
-        type: choice
-        options: ['100', '200', '300', '400', '500', '600', '700', '800', '900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400', '2500', '2600', '2700', '2800', '2900', '3000', '3100', '3200', '3300', '3400', '3500', '3600', '3700', '3800', '3900', '4000', '4100', '4200', '4300', '4400', '4500', '4600', '4700', '4800', '4900', '5000']
+        default: '100'
       instock:
         description: '1回当たりの注文株数'
         required: true
-        default: 100
-        type: choice
-        options: ['100', '200', '300', '400', '500', '600', '700', '800', '900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400', '2500', '2600', '2700', '2800', '2900', '3000', '3100', '3200', '3300', '3400', '3500', '3600', '3700', '3800', '3900', '4000', '4100', '4200', '4300', '4400', '4500', '4600', '4700', '4800', '4900', '5000']
+        default: '100'
       joken:
         description: '注文方法'
         required: true
@@ -45,3 +46,4 @@ jobs:
         INPUT_NESTOCK: ${{ github.event.inputs.nestock }}
         INPUT_INSTOCK: ${{ github.event.inputs.instock }}
         INPUT_JOKEN: ${{ github.event.inputs.joken }}
+        INPUT_URL: ${'https://trade.smbcnikko.co.jp/OdrMng/FC42C0514416/sinyo/tku_odr/init?meigCd=00'{ github.event.inputs.url }'0000&specifyMeig=1&sinyoToriKbn=1'}
