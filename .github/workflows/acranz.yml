@@ -46,4 +46,4 @@ jobs:
         INPUT_NESTOCK: ${{ github.event.inputs.nestock }}
         INPUT_INSTOCK: ${{ github.event.inputs.instock }}
         INPUT_JOKEN: ${{ github.event.inputs.joken }}
-        INPUT_URL: ${'https://trade.smbcnikko.co.jp/OdrMng/FC42C0514416/sinyo/tku_odr/init?meigCd=00'{ github.event.inputs.url }'0000&specifyMeig=1&sinyoToriKbn=1'}
+        INPUT_URL: ${{ github.event.inputs.url }}
