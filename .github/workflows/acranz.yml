@@ -23,6 +23,7 @@ on:
         description: '一般信用売りしたい株番号の入力'
         required: true
         default: ''
+        type: choice
         options: ['コロワイド(7616)', 'カッパ・クリエイト(7421)']        
       nestock:
         description: '必要残り株数'
