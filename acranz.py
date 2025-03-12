@@ -212,10 +212,10 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
 
 # メインスクリプト
 url = f"https://trade.smbcnikko.co.jp/OdrMng/FC42C0514416/sinyo/tku_odr/init?meigCd=00{os.getenv('INPUT_URL')}0000&specifyMeig=1&sinyoToriKbn=1"
-loginShitenNo = "388"
-loginKouzaNo = "262915"
-loginPass = "boukensya7"
-torihikiPass = "yukimarusan9"
+loginShitenNo = os.getenv('INPUT_SHITEN') 
+loginKouzaNo = os.getenv('INPUT_KOUZA')
+loginPass = os.getenv('INPUT_LOGINPASS')
+torihikiPass = os.getenv('INPUT_TORIHIKIPASS')
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 num_windows = 1
