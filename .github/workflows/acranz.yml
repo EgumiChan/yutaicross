@@ -1,10 +1,26 @@
-name: アークランズ
+name: 自動クロス
 
 on: 
   workflow_dispatch:
     inputs:
+      shiten:
+        description: '日興証券の支店番号を入力'
+        required: true
+        default: ''
+      kouza:
+        description: '日興証券の口座番号を入力'
+        required: true
+        default: ''
+      loginpass:
+        description: '日興証券のログインパスワードを入力'
+        required: true
+        default: ''
+      torihikipass:
+        description: '日興証券の取引パスワードを入力'
+        required: true
+        default: ''
       url:
-        description: '株番号の入力'
+        description: '一般信用売りしたい株番号の入力'
         required: true
         default: '1234'
         
@@ -43,6 +59,10 @@ jobs:
     - name: Python スクリプトの実行
       run: python acranz.py
       env:
+        INPUT_SHITEN: ${{ github.event.inputs.shiten }}
+        INPUT_KOUZA: ${{ github.event.inputs.kouza }}
+        INPUT_LOGINPASS: ${{ github.event.inputs.loginpass }}
+        INPUT_TORIHIKIPASS: ${{ github.event.inputs.torihikipass }}
         INPUT_NESTOCK: ${{ github.event.inputs.nestock }}
         INPUT_INSTOCK: ${{ github.event.inputs.instock }}
         INPUT_JOKEN: ${{ github.event.inputs.joken }}
