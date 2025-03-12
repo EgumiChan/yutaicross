@@ -58,7 +58,7 @@ jobs:
         pip install -r requirements.txt
       
     - name: Python スクリプトの実行
-      run: python acranz.py
+      run: python autocross.py
       env:
         INPUT_SHITEN: ${{ github.event.inputs.shiten }}
         INPUT_KOUZA: ${{ github.event.inputs.kouza }}
