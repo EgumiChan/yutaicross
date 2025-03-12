@@ -211,7 +211,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     driver.quit()
 
 # メインスクリプト
-url = "https://trade.smbcnikko.co.jp/OdrMng/6BC1B0438251/sinyo/tku_odr/init?meigCd=0076160000&specifyMeig=1&sinyoToriKbn=1"
+url = os.getenv('INPUT_URL')
 loginShitenNo = "388"
 loginKouzaNo = "262915"
 loginPass = "boukensya7"
@@ -219,9 +219,9 @@ torihikiPass = "yukimarusan9"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 final_xpath = '//*[@id="printzone"]/div[2]/table/tbody/tr/td/div[5]/table/tbody/tr[4]/td/div/div[2]/table/tbody/tr[2]/td/div[3]/table/tbody/tr/td/table/tbody/tr[1]/td/form/div[4]/input'
 num_windows = 1
-joken = os.getenv('INPUT_QUANTITY') #注文方法
-neStock = os.getenv('INPUT_QUANTITY') #残り必要株数
-inStock = os.getenv('INPUT_QUANTITY') #1回注文株数
+joken = os.getenv('INPUT_JOKEN') #注文方法
+neStock = os.getenv('INPUT_NESTOCK') #残り必要株数
+inStock = os.getenv('INPUT_INSTOCK') #1回注文株数
 
 
 
