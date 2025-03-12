@@ -211,7 +211,9 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
     driver.quit()
 
 # メインスクリプト
-url = f"https://trade.smbcnikko.co.jp/OdrMng/FC42C0514416/sinyo/tku_odr/init?meigCd=00{os.getenv('INPUT_URL')}0000&specifyMeig=1&sinyoToriKbn=1"
+input_kabu = os.getenv('INPUT_URL')
+input_kabuNo = input_kabu[-5:-1]
+url = f"https://trade.smbcnikko.co.jp/OdrMng/FC42C0514416/sinyo/tku_odr/init?meigCd=00{input_kabuNo}0000&specifyMeig=1&sinyoToriKbn=1"
 loginShitenNo = os.getenv('INPUT_SHITEN') 
 loginKouzaNo = os.getenv('INPUT_KOUZA')
 loginPass = os.getenv('INPUT_LOGINPASS')
