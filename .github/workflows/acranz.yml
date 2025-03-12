@@ -22,15 +22,8 @@ on:
       url:
         description: '一般信用売りしたい株番号の入力'
         required: true
-        default: 'コロワイド(7616)'
-        options: 
-          - >
-            コロワイド(7616):
-            3月末優待
-          - >
-            カッパ・クリエイト(7421):
-            3月末優待
-        
+        default: ''
+        options: ['コロワイド(7616)', 'カッパ・クリエイト(7421)']        
       nestock:
         description: '必要残り株数'
         required: true
