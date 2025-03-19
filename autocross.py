@@ -65,147 +65,83 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
 
     while True:
         try:
+            # 指定されたXPathのテキストを取得
+            text_element = driver.find_element(By.XPATH, '//*[@id="iurikanosu"]/span')
+            text_value = text_element.text
+
+            # テキストを数値に変換
+            numeric_value = int(text_value.replace('株', '').replace(' ', '').replace(',', ''))
             # アクセスしたページの銘柄の名称を取得して代入
             text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
 
-            # 株数等を入力
-            logging.info(f"{text_to_log}の一般信用売り連打を実行します")
-            input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-            input_field.send_keys(inStock)
+            if numeric_value > 0:            
+                # 株数等を入力
+                logging.info(f"{text_to_log}の一般信用売りを実行します")
+                input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
+                input_field.send_keys(inStock)
+    
+                new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
+                new_button.click()
+    
+                if joken == "寄付":
+                    joken_button = driver.find_element(By.XPATH, '//*[@id="nyori"]')
+                    joken_button.click()                                    
+                elif joken == "引け":
+                    joken_button = driver.find_element(By.XPATH, '//*[@id="nhike"]')
+                    joken_button.click()
+    
+                final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
+                final_button.click()
 
-            new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-            new_button.click()
+                # 信用売りのボタンをクリック（連打対象）
+                #time.sleep(0.1)
+                final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
+                final_input.click()
 
-            if joken == "寄付":
-                joken_button = driver.find_element(By.XPATH, '//*[@id="nyori"]')
-                joken_button.click()                                    
-            elif joken == "引け":
-                joken_button = driver.find_element(By.XPATH, '//*[@id="nhike"]')
-                joken_button.click()
+                # 取引パスワードの入力
+                pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
+                pad_input.send_keys(torihikiPass)
 
-            final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-            final_button.click()
+                # 取引確定ボタンのクリック
+                final_click = driver.find_element(By.XPATH, final_xpath)
+                final_click.click()
 
-            while True:
-                try:
-                    # 信用売りのボタンをクリック（連打対象）
-                    #time.sleep(0.1)
-                    final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
-                    final_input.click()
+            try:
+                # 取引確定ボタンクリック後、争奪戦に勝利したかどうかを要素の有無で判断
+                final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
+                final_text = final_element.text
 
-                    try:
-                        # 取引パスワードの入力
-                        pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
-                        pad_input.send_keys(torihikiPass)
+                # Discordに一般信用売りの在庫取得完了の通知
+                message = f'一般信用売りが完了しました。\n　{text_to_log} {inStock}株\n　{final_text}'
+                send_discord_notify(message)
+                logging.info(message)
 
-                        # 取引確定ボタンのクリック
-                        final_click = driver.find_element(By.XPATH, final_xpath)
-                        final_click.click()
+                # 取得した在庫数を必要残り株数からマイナスし、残り必要数を算出
+                neStock = neStock - inStock
 
-                        try:
-                            # 取引確定ボタンクリック後、争奪戦に勝利したかどうかを要素の有無で判断
-                            final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
-                            final_text = final_element.text
+                # 残り必要数が0の場合は、ループ停止。0以外の場合はループ継続
+                if neStock > 0:
+                    # 残り必要数が入力株数よりも少ない場合、入力株数を残り必要数にするように条件分岐
+                    if neStock < inStock:
+                        inStock = neStock
 
-                            # Discordに一般信用売りの在庫取得完了の通知
-                            message = f'一般信用売りが完了しました。\n　{text_to_log} {inStock}株\n　{final_text}'
-                            send_discord_notify(message)
-                            logging.info(message)
-
-                            # 取得した在庫数を必要残り株数からマイナスし、残り必要数を算出
-                            neStock = neStock - inStock
-
-                            # 残り必要数が0の場合は、ループ停止。0以外の場合はループ継続
-                            if neStock > 0:
-                                # 残り必要数が入力株数よりも少ない場合、入力株数を残り必要数にするように条件分岐
-                                if neStock < inStock:
-                                    inStock = neStock
-
-                                driver.get(url)
-                        
-                                text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-                    
-                                logging.info(f"{text_to_log}の一般信用売り連打を追加実行します")
-                                input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-                                input_field.send_keys(inStock)
-                    
-                                new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-                                new_button.click()
-
-                                if joken == "寄付":
-                                    joken_button = driver.find_element(By.XPATH, '//*[@id="nyori"]')
-                                    joken_button.click()                                    
-                                elif joken == "引け":
-                                    joken_button = driver.find_element(By.XPATH, '//*[@id="nhike"]')
-                                    joken_button.click()
-                    
-                                final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-                                final_button.click()
-                                
-                                continue
-
-                            else:
-                                break
-
-                        except:
-                            logging.error('争奪戦に負けましたので在庫リスポーン取得を試みます。')
-                            
-                            driver.get(url)
-                    
-                            text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-                
-                            logging.info(f"{text_to_log}の一般信用売り連打を再度実行します")
-                            input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-                            input_field.send_keys(inStock)
-                
-                            new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-                            new_button.click()
-
-                            if joken == "寄付":
-                                joken_button = driver.find_element(By.XPATH, '//*[@id="nyori"]')
-                                joken_button.click()                                    
-                            elif joken == "引け":
-                                joken_button = driver.find_element(By.XPATH, '//*[@id="nhike"]')
-                                joken_button.click()
-                
-                            final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-                            final_button.click()
-                            
-                            continue
-                        break
-                    except:
-                        logging.error("在庫なし")
-                        continue
-                    break
-                except Exception as e:
-                    logging.error('ページに不正検知されましたのでURLを再度読み込みます')
-                    
                     driver.get(url)
-                    
-                    text_to_log = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[2]/td/table/tbody/tr/td[3]/h2').text
-        
-                    logging.info(f"{text_to_log}の一般信用売り連打を再度実行します")
-                    input_field = driver.find_element(By.XPATH, '//*[@id="isuryo"]/table/tbody/tr[1]/td[1]/input')
-                    input_field.send_keys(inStock)
-        
-                    new_button = driver.find_element(By.XPATH, '//*[@id="j"]')
-                    new_button.click()
-
-                    if joken == "寄付":
-                        joken_button = driver.find_element(By.XPATH, '//*[@id="nyori"]')
-                        joken_button.click()                                    
-                    elif joken == "引け":
-                        joken_button = driver.find_element(By.XPATH, '//*[@id="nhike"]')
-                        joken_button.click()
-        
-                    final_button = driver.find_element(By.XPATH, '//*[@id="tojit"]')
-                    final_button.click()
                     continue
-            break    
+                        
+                else:
+                    break
+
+            except:
+                logging.error('争奪戦に負けましたので在庫リスポーン取得を試みます。')
+                    
+                driver.get(url)
+                continue
+            break
         except Exception as e:
-            logging.error(f"ページロードエラー: {e}")
+            logging.error('在庫なし。再チェック')
             driver.get(url)
             continue
+        break
 
     time.sleep(5)
     driver.quit()
