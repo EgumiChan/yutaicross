@@ -65,6 +65,8 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
 
     while True:
         try:
+            # 指定した銘柄の一般信用売りのページにアクセス
+            driver.get(url)
             # 指定されたXPathのテキストを取得
             text_element = driver.find_element(By.XPATH, '//*[@id="iurikanosu"]/span')
             text_value = text_element.text
@@ -106,7 +108,6 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
                 final_click = driver.find_element(By.XPATH, final_xpath)
                 final_click.click()
 
-            try:
                 # 取引確定ボタンクリック後、争奪戦に勝利したかどうかを要素の有無で判断
                 final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
                 final_text = final_element.text
@@ -130,18 +131,9 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
                         
                 else:
                     break
-
-            except:
-                logging.error('争奪戦に負けましたので在庫リスポーン取得を試みます。')
-                    
-                driver.get(url)
-                continue
-            break
         except Exception as e:
             logging.error('在庫なし。再チェック')
-            driver.get(url)
             continue
-        break
 
     time.sleep(5)
     driver.quit()
