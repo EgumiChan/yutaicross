@@ -65,6 +65,7 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
 
     while True:
         try:
+            time.sleep(5)
             # 指定した銘柄の一般信用売りのページにアクセス
             driver.get(url)
             # 指定されたXPathのテキストを取得
