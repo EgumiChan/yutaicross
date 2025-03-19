@@ -131,8 +131,11 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
                         
                 else:
                     break
+            else:
+                logging.info('在庫なし。再読み込みします。')
+                continue
         except Exception as e:
-            logging.error('在庫なし。再チェック')
+            logging.error('在庫確保敗北。在庫復活チェックします')
             continue
 
     time.sleep(5)
