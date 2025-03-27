@@ -100,18 +100,22 @@ def perform_operations(url, loginShitenNo, loginKouzaNo, loginPass, torihikiPass
                 #time.sleep(0.1)
                 final_input = driver.find_element(By.XPATH, '//*[@id="printzone"]/div[2]/form/table/tbody/tr/td/div[2]/table[2]/tbody/tr[4]/td/div/div[4]/table/tbody/tr/td/input')
                 final_input.click()
+                logging.info("クリック完了")
 
                 # 取引パスワードの入力
                 pad_input = driver.find_element(By.XPATH, '//*[@id="padInput"]')
                 pad_input.send_keys(torihikiPass)
+                logging.info("パス入力完了")
 
                 # 取引確定ボタンのクリック
                 final_click = driver.find_element(By.XPATH, final_xpath)
                 final_click.click()
+                logging.info("取引確定ボタンクリック完了")
 
                 # 取引確定ボタンクリック後、争奪戦に勝利したかどうかを要素の有無で判断
                 final_element = driver.find_element(By.XPATH, '//*[@id="printzone"]/form/div/table/tbody/tr/td/div[2]')
                 final_text = final_element.text
+                logging.info("要素がありました")
 
                 # Discordに一般信用売りの在庫取得完了の通知
                 message = f'一般信用売りが完了しました。\n　{text_to_log} {inStock}株\n　{final_text}'
